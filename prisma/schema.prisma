@@ -1,0 +1,21 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Video {
+  id          String   @id @default(cuid())
+  publishedAt DateTime
+  title       String?
+  url         String?
+  hadAce      Boolean
+  winnerName  String?
+  createdAt   DateTime @default(now())
+}

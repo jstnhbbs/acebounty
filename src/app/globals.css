@@ -1,0 +1,160 @@
+@import "tailwindcss";
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #333;
+  --accent: #b79953;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* Putting League – exact light/dark styling */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s ease;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Light mode (default) – Putting League */
+body {
+  background: linear-gradient(135deg, #ffffff 0%, #faf8f3 50%, #f5e6d3 100%);
+  color: #333;
+}
+
+/* Dark mode – Putting League */
+[data-theme="dark"] body,
+html.dark body {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: #e0e0e0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Page title styling - matching Putting League exactly */
+.page-title {
+  color: #333 !important;
+  text-shadow: none !important;
+  transition: color 0.3s ease;
+}
+
+[data-theme='dark'] .page-title,
+html.dark .page-title {
+  color: #e0e0e0 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Ensure navbar text is always light on dark background - matching Putting League */
+header a,
+header button,
+header nav a,
+header nav button {
+  color: #e0e0e0 !important;
+}
+
+header a:hover,
+header button:hover,
+header nav a:hover,
+header nav button:hover {
+  color: #B79953 !important;
+}
+
+/* Active nav link */
+header nav a.active,
+header a.active {
+  background: rgba(183, 153, 83, 0.25) !important;
+  color: #B79953 !important;
+}
+
+[data-theme='dark'] header nav a.active,
+[data-theme='dark'] header a.active,
+html.dark header nav a.active,
+html.dark header a.active {
+  background: rgba(183, 153, 83, 0.2) !important;
+  color: #B79953 !important;
+}
+
+/* Ensure all headings have proper contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: #333 !important;
+}
+
+[data-theme='dark'] h1,
+[data-theme='dark'] h2,
+[data-theme='dark'] h3,
+[data-theme='dark'] h4,
+[data-theme='dark'] h5,
+[data-theme='dark'] h6,
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark h4,
+html.dark h5,
+html.dark h6 {
+  color: #e0e0e0 !important;
+}
+
+/* Ensure paragraphs have proper contrast */
+p {
+  color: #333 !important;
+}
+
+[data-theme='dark'] p,
+html.dark p {
+  color: #e0e0e0 !important;
+}
+
+/* Ensure video cards are white in light mode - matching Putting League */
+.video-card {
+  background: white !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme='dark'] .video-card,
+html.dark .video-card {
+  background: #2d2d44 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
+
+.video-card:hover {
+  box-shadow: 0 12px 24px rgba(183, 153, 83, 0.3) !important;
+}
+
+[data-theme='dark'] .video-card:hover,
+html.dark .video-card:hover {
+  box-shadow: 0 12px 24px rgba(183, 153, 83, 0.4) !important;
+}
+
+/* Ensure bounty card is white in light mode - matching Putting League */
+.bounty-card {
+  background: white !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme='dark'] .bounty-card,
+html.dark .bounty-card {
+  background: #2d2d44 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3) !important;
+}
