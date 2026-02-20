@@ -13,7 +13,8 @@ export default async function HomePage() {
   });
   const currentYear = new Date().getFullYear();
   const videosThisYear = videos.filter(
-    (v) => new Date(v.publishedAt).getFullYear() === currentYear
+    (v: (typeof videos)[number]) =>
+      new Date(v.publishedAt).getFullYear() === currentYear
   );
   const recent = videosThisYear.slice(0, RECENT_COUNT);
   const currentBounty = getCurrentBounty(videos, currentYear);
