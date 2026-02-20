@@ -27,3 +27,6 @@ export const prisma =
   globalForPrisma.prisma ?? createPrisma();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+/** Video model type (use this instead of importing from @prisma/client) */
+export type Video = Awaited<ReturnType<typeof prisma.video.findMany>>[number];

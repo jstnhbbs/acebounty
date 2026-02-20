@@ -1,4 +1,4 @@
-import type { Video } from "@prisma/client";
+import type { Video } from "@/lib/db";
 import { VideoCardPublic } from "./VideoCardPublic";
 import { VideoRow } from "./VideoRow";
 

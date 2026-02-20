@@ -1,6 +1,6 @@
 "use client";
 
-import type { Video } from "@prisma/client";
+import type { Video } from "@/lib/db";
 import Link from "next/link";
 import { useState } from "react";
 
