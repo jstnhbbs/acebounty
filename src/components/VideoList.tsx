@@ -34,11 +34,7 @@ export function VideoList({
         const isNewest = index === 0;
         return (
           <li key={v.id}>
-            <div className={`group flex h-full flex-col rounded-xl p-8 shadow-[0_4px_6px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_12px_24px_rgba(183,153,83,0.3)] ${
-              isNewest 
-                ? "border-2 border-[#B79953]" 
-                : "border-2 border-transparent"
-            } ${!isNewest ? "hover:border-[#B79953]" : ""} video-card`}>
+            <div className="group flex h-full flex-col rounded-xl border-2 border-transparent p-8 shadow-[0_4px_6px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-2 hover:border-[#B79953] hover:shadow-[0_12px_24px_rgba(183,153,83,0.3)] video-card">
               {admin ? (
                 <VideoRow
                   video={v}
