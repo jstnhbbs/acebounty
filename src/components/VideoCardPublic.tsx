@@ -4,18 +4,23 @@ import type { Video } from "@/lib/db";
 import Link from "next/link";
 import { useState } from "react";
 
+const SPOILER_WINDOW_MS = 24 * 60 * 60 * 1000; // 1 day
+
 export function VideoCardPublic({
   video,
   formattedDate,
   bountyAfter,
-  isNewest = false,
+  spoilerCutoffMs,
 }: {
   video: Video;
   formattedDate: string;
   bountyAfter?: number;
-  isNewest?: boolean;
+  spoilerCutoffMs: number;
 }) {
   const [revealed, setRevealed] = useState(false);
+  const publishedAtMs = new Date(video.publishedAt).getTime();
+  const showSpoilerButton =
+    spoilerCutoffMs - publishedAtMs <= SPOILER_WINDOW_MS;
 
   return (
     <>
@@ -32,7 +37,7 @@ export function VideoCardPublic({
 
         {/* Result Section */}
         <div className="flex flex-col gap-3">
-          {isNewest ? (
+          {showSpoilerButton ? (
             <>
               <button
                 type="button"

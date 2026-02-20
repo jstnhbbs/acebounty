@@ -40,7 +40,12 @@ export default async function AdminPage() {
           <h2 className="mb-4 text-xl font-semibold text-[#333] transition-colors duration-300 dark:text-[#e0e0e0]">
             All videos
           </h2>
-          <VideoList videos={videos} showBountyAfter={bountyAfter} admin />
+          <VideoList
+            videos={videos}
+            showBountyAfter={bountyAfter}
+            spoilerCutoffMs={Date.now()}
+            admin
+          />
         </section>
       </div>
     </main>

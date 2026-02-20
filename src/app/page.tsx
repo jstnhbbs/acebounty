@@ -45,7 +45,11 @@ export default async function HomePage() {
           <h2 className="mb-4 text-2xl font-semibold text-[#333] transition-colors duration-300 [text-shadow:none] dark:text-[#e0e0e0] dark:[text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]">
             Recent videos ({currentYear})
           </h2>
-          <VideoList videos={recent} showBountyAfter={bountyAfter} />
+          <VideoList
+            videos={recent}
+            showBountyAfter={bountyAfter}
+            spoilerCutoffMs={Date.now()}
+          />
         </section>
       </div>
     </main>

@@ -15,10 +15,12 @@ export function VideoList({
   videos,
   showBountyAfter,
   admin,
+  spoilerCutoffMs,
 }: {
   videos: Video[];
   showBountyAfter?: Map<string, number>;
   admin?: boolean;
+  spoilerCutoffMs: number;
 }) {
   if (videos.length === 0) {
     return (
@@ -30,9 +32,7 @@ export function VideoList({
 
   return (
     <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {videos.map((v, index) => {
-        const isNewest = index === 0;
-        return (
+      {videos.map((v) => (
           <li key={v.id}>
             <div className="group flex h-full flex-col rounded-xl border-2 border-transparent p-8 shadow-[0_4px_6px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-2 hover:border-[#B79953] hover:shadow-[0_12px_24px_rgba(183,153,83,0.3)] video-card">
               {admin ? (
@@ -46,13 +46,12 @@ export function VideoList({
                   video={v}
                   formattedDate={formatDate(v.publishedAt)}
                   bountyAfter={showBountyAfter?.get(v.id)}
-                  isNewest={isNewest}
+                  spoilerCutoffMs={spoilerCutoffMs}
                 />
               )}
             </div>
           </li>
-        );
-      })}
+        ))}
     </ul>
   );
 }
