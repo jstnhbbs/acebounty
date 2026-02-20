@@ -14,7 +14,7 @@ export function AddVideoForm() {
     setLoading(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const publishedAt = formData.get("publishedAt") as string;
+    const publishedAt = (formData.get("publishedAt") as string)?.trim();
     const title = (formData.get("title") as string) || undefined;
     const url = (formData.get("url") as string) || undefined;
     const hadAce = formData.get("hadAce") === "yes";
@@ -25,7 +25,13 @@ export function AddVideoForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          publishedAt: publishedAt || new Date().toISOString().slice(0, 10),
+          publishedAt:
+            publishedAt ||
+            (() => {
+              const d = new Date();
+              const pad = (n: number) => String(n).padStart(2, "0");
+              return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+            })(),
           title: title || null,
           url: url || null,
           hadAce,
@@ -58,13 +64,17 @@ export function AddVideoForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1 block text-sm font-medium text-[#333] transition-colors dark:text-zinc-300">
-            Date
+            Date & time
           </label>
           <input
-            type="date"
+            type="datetime-local"
             name="publishedAt"
             required
-            defaultValue={new Date().toISOString().slice(0, 10)}
+            defaultValue={(() => {
+              const d = new Date();
+              const pad = (n: number) => String(n).padStart(2, "0");
+              return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+            })()}
             className="w-full rounded border border-[#999] bg-white px-3 py-2 text-[#333] focus:border-[#B79953] focus:outline-none focus:ring-1 focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-[#B79953] dark:focus:ring-[#B79953]"
           />
         </div>

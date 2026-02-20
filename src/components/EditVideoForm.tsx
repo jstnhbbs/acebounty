@@ -5,13 +5,18 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+function toDatetimeLocal(d: Date) {
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export function EditVideoForm({ video }: { video: Video }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const [publishedAt, setPublishedAt] = useState(
-    new Date(video.publishedAt).toISOString().slice(0, 10)
+  const [publishedAt, setPublishedAt] = useState(() =>
+    toDatetimeLocal(new Date(video.publishedAt))
   );
   const [title, setTitle] = useState(video.title ?? "");
   const [url, setUrl] = useState(video.url ?? "");
@@ -60,10 +65,10 @@ export function EditVideoForm({ video }: { video: Video }) {
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="mb-1 block text-sm font-medium text-[#333] transition-colors dark:text-zinc-300">
-            Date
+            Date & time
           </label>
           <input
-            type="date"
+            type="datetime-local"
             value={publishedAt}
             onChange={(e) => setPublishedAt(e.target.value)}
             required
