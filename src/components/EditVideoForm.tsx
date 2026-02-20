@@ -32,7 +32,7 @@ export function EditVideoForm({ video }: { video: Video }) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          publishedAt,
+          publishedAt: new Date(publishedAt).toISOString(),
           title: title || null,
           url: url || null,
           hadAce,
