@@ -7,8 +7,8 @@ import { HeaderAuth } from "./HeaderAuth";
 import { ThemeToggle } from "./ThemeToggle";
 
 const navLink =
-  "rounded-lg px-4 py-2 text-[#e0e0e0] font-medium transition-all duration-300 hover:bg-[rgba(183,153,83,0.2)] hover:text-[#B79953]";
-const navLinkActive = "bg-[rgba(183,153,83,0.25)] text-[#B79953] font-semibold";
+  "rounded-lg px-4 py-2 text-header-fg font-medium transition-all duration-300 hover:bg-accent/20 hover:text-accent";
+const navLinkActive = "bg-accent/25 text-accent font-semibold";
 
 export function HeaderNav() {
   const pathname = usePathname();
@@ -18,7 +18,7 @@ export function HeaderNav() {
     <div className="container mx-auto flex max-w-[1200px] items-center justify-between px-8">
       <Link
         href="/"
-        className="text-xl font-bold text-[#e0e0e0] transition-all duration-300 hover:scale-105 hover:text-[#B79953]"
+        className="text-xl font-bold text-header-fg transition-all duration-300 hover:scale-105 hover:text-accent"
       >
         Ace Bounty
       </Link>

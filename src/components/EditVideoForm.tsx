@@ -1,14 +1,11 @@
 "use client";
 
 import type { Video } from "@/lib/db";
+import { toDatetimeLocal } from "@/lib/format";
+import { isIncludedInBounty } from "@/lib/video";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-function toDatetimeLocal(d: Date) {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export function EditVideoForm({ video }: { video: Video }) {
   const router = useRouter();
@@ -22,8 +19,8 @@ export function EditVideoForm({ video }: { video: Video }) {
   const [url, setUrl] = useState(video.url ?? "");
   const [hadAce, setHadAce] = useState(video.hadAce);
   const [winnerName, setWinnerName] = useState(video.winnerName ?? "");
-  const [includeInBounty, setIncludeInBounty] = useState(
-    (video as { includeInBounty?: boolean }).includeInBounty !== false
+  const [includeInBounty, setIncludeInBounty] = useState(() =>
+    isIncludedInBounty(video)
   );
 
   async function handleSubmit(e: React.FormEvent) {
@@ -61,53 +58,43 @@ export function EditVideoForm({ video }: { video: Video }) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-4"
     >
-      {error && (
-        <p className="rounded bg-red-100 p-2 text-sm text-red-800 dark:bg-red-900/30 dark:text-red-300">
-          {error}
-        </p>
-      )}
+      {error && <p className="form-error">{error}</p>}
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-[#333] transition-colors dark:text-zinc-300">
-            Date & time
-          </label>
+          <label className="form-label">Date & time</label>
           <input
             type="datetime-local"
             value={publishedAt}
             onChange={(e) => setPublishedAt(e.target.value)}
             required
-            className="w-full rounded border border-[#999] bg-white px-3 py-2 text-[#333] focus:border-[#B79953] focus:outline-none focus:ring-1 focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:focus:border-[#B79953] dark:focus:ring-[#B79953]"
+            className="form-input"
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-[#333] transition-colors dark:text-zinc-300">
-            Title (optional)
-          </label>
+          <label className="form-label">Title (optional)</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Video title"
-            className="w-full rounded border border-[#999] bg-white px-3 py-2 text-[#333] placeholder:text-[#666] focus:border-[#B79953] focus:outline-none focus:ring-1 focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-[#B79953] dark:focus:ring-[#B79953]"
+            className="form-input"
           />
         </div>
       </div>
       <div>
-        <label className="mb-1 block text-sm font-medium text-[#333] transition-colors dark:text-zinc-300">
-          URL (optional)
-        </label>
+        <label className="form-label">URL (optional)</label>
         <input
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="https://youtube.com/..."
-          className="w-full rounded border border-[#999] bg-white px-3 py-2 text-[#333] placeholder:text-[#666] focus:border-[#B79953] focus:outline-none focus:ring-1 focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:focus:border-[#B79953] dark:focus:ring-[#B79953]"
+          className="form-input"
         />
       </div>
       <div className="flex flex-wrap items-center gap-4">
         <fieldset className="flex items-center gap-2">
           <legend className="sr-only">Ace?</legend>
-          <label className="flex items-center gap-1.5 text-sm text-[#333] transition-colors dark:text-zinc-300">
+          <label className="form-label-inline">
             <input
               type="radio"
               name="hadAce"
@@ -116,7 +103,7 @@ export function EditVideoForm({ video }: { video: Video }) {
             />
             No ace
           </label>
-          <label className="flex items-center gap-1.5 text-sm text-[#333] transition-colors dark:text-zinc-300">
+          <label className="form-label-inline">
             <input
               type="radio"
               name="hadAce"
@@ -127,39 +114,30 @@ export function EditVideoForm({ video }: { video: Video }) {
           </label>
         </fieldset>
         <div>
-          <label className="mr-2 text-sm font-medium text-[#333] transition-colors dark:text-zinc-300">
-            Winner name (if ace)
-          </label>
+          <label className="form-label">Winner name (if ace)</label>
           <input
             type="text"
             value={winnerName}
             onChange={(e) => setWinnerName(e.target.value)}
             placeholder="Name"
-            className="rounded border border-[#999] bg-white px-3 py-2 text-[#333] placeholder:text-[#666] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+            className="form-input form-input-sm mt-1"
           />
         </div>
-        <label className="flex items-center gap-2 text-sm text-[#333] transition-colors dark:text-zinc-300">
+        <label className="form-label-inline">
           <input
             type="checkbox"
             checked={includeInBounty}
             onChange={(e) => setIncludeInBounty(e.target.checked)}
-            className="rounded border-[#999] text-[#B79953] focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800"
+            className="rounded border-border text-accent focus:ring-accent dark:border-zinc-600 dark:bg-zinc-800"
           />
           Include in bounty calculation
         </label>
       </div>
       <div className="flex justify-end gap-2">
-        <Link
-          href="/admin"
-          className="rounded border-2 border-[#B79953]/50 px-4 py-2 text-sm font-medium text-[#B79953] transition-colors hover:bg-[#B79953]/10 dark:hover:bg-[#B79953]/20"
-        >
+        <Link href="/admin" className="btn-secondary">
           Cancel
         </Link>
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded bg-[#B79953] px-4 py-2 font-medium text-white transition-colors hover:opacity-90 disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading} className="btn-primary">
           {loading ? "Saving…" : "Save"}
         </button>
       </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Video } from "@/lib/db";
+import { isIncludedInBounty } from "@/lib/video";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -33,10 +34,10 @@ export function VideoRow({
       <div className="flex flex-1 flex-col gap-4">
         {/* Title and Date */}
         <div className="flex flex-col gap-1">
-          <h3 className="font-semibold text-lg leading-tight text-[#333] transition-colors duration-300 dark:text-[#e0e0e0]">
+          <h3 className="font-semibold text-lg leading-tight text-foreground">
             {video.title || "Untitled"}
           </h3>
-          <p className="text-sm text-[#666] transition-colors duration-300 dark:text-[#b0b0b0]">
+          <p className="text-sm text-foreground-muted">
             {formattedDate}
           </p>
         </div>
@@ -45,35 +46,28 @@ export function VideoRow({
         <div className="flex flex-col gap-2.5">
           {video.hadAce ? (
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#B79953]/20 px-3 py-1.5 text-sm font-medium text-[#B79953]">
+              <span className="badge badge-ace">
                 🎯 Ace
                 {video.winnerName ? ` — ${video.winnerName}` : ""}
               </span>
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <span className="rounded-full bg-[#666]/15 px-3 py-1.5 text-sm font-medium text-[#666] transition-colors dark:bg-white/10 dark:text-[#b0b0b0]">
-                No ace
-              </span>
+              <span className="badge badge-no-ace">No ace</span>
             </div>
           )}
-          {(video as { includeInBounty?: boolean }).includeInBounty !== false && bountyAfter !== undefined ? (
-            <p className="text-sm font-semibold text-[#B79953]">
-              Bounty after: <span className="text-base">${bountyAfter}</span>
+          {isIncludedInBounty(video) && bountyAfter !== undefined ? (
+            <p className="bounty-after">
+              Bounty after: <span>${bountyAfter}</span>
             </p>
-          ) : (video as { includeInBounty?: boolean }).includeInBounty === false ? (
-            <p className="text-sm text-[#666] transition-colors dark:text-[#b0b0b0]">
-              Not counted in bounty
-            </p>
+          ) : !isIncludedInBounty(video) ? (
+            <p className="bounty-excluded">Not counted in bounty</p>
           ) : null}
         </div>
 
         {/* Actions */}
-        <div className="flex flex-wrap items-center gap-3 pt-2 border-t border-[#e5e5e5] dark:border-white/10">
-          <Link
-            href={`/admin/videos/${video.id}/edit`}
-            className="text-sm font-medium text-[#B79953] transition-colors hover:text-[#a08648] hover:underline dark:hover:text-[#c9b068]"
-          >
+        <div className="card-actions">
+          <Link href={`/admin/videos/${video.id}/edit`} className="card-link">
             Edit
           </Link>
           <button
@@ -89,7 +83,7 @@ export function VideoRow({
               href={video.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium text-[#B79953] transition-colors hover:text-[#a08648] hover:underline dark:hover:text-[#c9b068]"
+              className="card-link"
             >
               Watch
             </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import type { Video } from "@/lib/db";
+import { isIncludedInBounty } from "@/lib/video";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -21,17 +22,17 @@ export function VideoCardPublic({
   const publishedAtMs = new Date(video.publishedAt).getTime();
   const showSpoilerButton =
     spoilerCutoffMs - publishedAtMs <= SPOILER_WINDOW_MS;
-  const includeInBounty = (video as { includeInBounty?: boolean }).includeInBounty !== false;
+  const includeInBounty = isIncludedInBounty(video);
 
   return (
     <>
       <div className="flex flex-1 flex-col gap-4">
         {/* Title and Date */}
         <div className="flex flex-col gap-1">
-          <h3 className="text-xl font-semibold leading-tight text-[#333] transition-colors duration-300 group-hover:text-[#B79953] dark:text-[#e0e0e0] dark:group-hover:text-[#B79953]">
+          <h3 className="text-xl font-semibold leading-tight text-foreground transition-colors duration-300 group-hover:text-accent">
             {video.title || "Untitled"}
           </h3>
-          <p className="text-base text-[#666] transition-colors duration-300 dark:text-[#b0b0b0]">
+          <p className="text-base text-foreground-muted transition-colors duration-300">
             {formattedDate}
           </p>
         </div>
@@ -43,7 +44,7 @@ export function VideoCardPublic({
               <button
                 type="button"
                 onClick={() => setRevealed(!revealed)}
-                className="w-full rounded-lg border-2 border-dashed border-[#B79953]/50 bg-[#B79953]/10 px-4 py-2.5 text-sm font-medium text-[#B79953] transition-all duration-200 hover:border-[#B79953] hover:bg-[#B79953]/20 dark:border-[#B79953]/50 dark:bg-[#B79953]/10 dark:hover:border-[#B79953] dark:hover:bg-[#B79953]/20"
+                className="spoiler-btn"
               >
                 {revealed ? "Hide spoiler" : "Spoiler"}
               </button>
@@ -51,26 +52,22 @@ export function VideoCardPublic({
                 <div className="flex flex-col gap-2.5">
                   {video.hadAce ? (
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-[#B79953]/20 px-3 py-1.5 text-sm font-medium text-[#B79953]">
+                      <span className="badge badge-ace">
                         🎯 Ace
                         {video.winnerName ? ` — ${video.winnerName}` : ""}
                       </span>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-[#666]/15 px-3 py-1.5 text-sm font-medium text-[#666] transition-colors dark:bg-white/10 dark:text-[#b0b0b0]">
-                        No ace
-                      </span>
+                      <span className="badge badge-no-ace">No ace</span>
                     </div>
                   )}
                   {includeInBounty && bountyAfter !== undefined ? (
-                    <p className="text-sm font-semibold text-[#B79953]">
-                      Bounty after: <span className="text-base">${bountyAfter}</span>
+                    <p className="bounty-after">
+                      Bounty after: <span>${bountyAfter}</span>
                     </p>
                   ) : !includeInBounty ? (
-                    <p className="text-sm text-[#666] transition-colors dark:text-[#b0b0b0]">
-                      Not counted in bounty
-                    </p>
+                    <p className="bounty-excluded">Not counted in bounty</p>
                   ) : null}
                 </div>
               )}
@@ -79,26 +76,22 @@ export function VideoCardPublic({
             <div className="flex flex-col gap-2.5">
               {video.hadAce ? (
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-[#B79953]/20 px-3 py-1.5 text-sm font-medium text-[#B79953]">
+                  <span className="badge badge-ace">
                     🎯 Ace
                     {video.winnerName ? ` — ${video.winnerName}` : ""}
                   </span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <span className="rounded-full bg-[#666]/15 px-3 py-1.5 text-sm font-medium text-[#666] transition-colors dark:bg-white/10 dark:text-[#b0b0b0]">
-                    No ace
-                  </span>
+                  <span className="badge badge-no-ace">No ace</span>
                 </div>
               )}
               {includeInBounty && bountyAfter !== undefined ? (
-                <p className="text-sm font-semibold text-[#B79953]">
-                  Bounty after: <span className="text-base">${bountyAfter}</span>
+                <p className="bounty-after">
+                  Bounty after: <span>${bountyAfter}</span>
                 </p>
               ) : !includeInBounty ? (
-                <p className="text-sm text-[#666] transition-colors dark:text-[#b0b0b0]">
-                  Not counted in bounty
-                </p>
+                <p className="bounty-excluded">Not counted in bounty</p>
               ) : null}
             </div>
           )}
@@ -107,12 +100,12 @@ export function VideoCardPublic({
 
       {/* Watch Link */}
       {video.url && (
-        <div className="mt-auto pt-2 border-t border-[#e5e5e5] dark:border-white/10">
+        <div className="mt-auto pt-2 border-t border-border-light dark:border-white/10">
           <Link
             href={video.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-[#B79953] transition-colors hover:text-[#a08648] hover:underline dark:hover:text-[#c9b068]"
+            className="card-link"
           >
             <span>Watch video</span>
             <span>→</span>

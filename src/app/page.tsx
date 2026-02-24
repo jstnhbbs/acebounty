@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { getCurrentBounty, getBountyAfterEachVideo } from "@/lib/bounty";
+import { isIncludedInBounty } from "@/lib/video";
 import { BountyDisplay } from "@/components/BountyDisplay";
 import { VideoList } from "@/components/VideoList";
 
@@ -18,9 +19,7 @@ export default async function HomePage() {
       new Date(v.publishedAt).getFullYear() === currentYear
   );
   const recent = videosThisYear.slice(0, RECENT_COUNT);
-  const videosForBounty = videos.filter(
-    (v) => (v as { includeInBounty?: boolean }).includeInBounty !== false
-  );
+  const videosForBounty = videos.filter(isIncludedInBounty);
   const currentBounty = getCurrentBounty(videosForBounty, currentYear);
   const bountyAfter = getBountyAfterEachVideo(videosForBounty);
 
@@ -30,7 +29,7 @@ export default async function HomePage() {
         <h1 className="text-center text-4xl font-bold transition-colors duration-300 sm:text-5xl page-title">
           Ace Bounty
         </h1>
-        <p className="mt-2 text-center text-xl text-[#666] transition-colors duration-300 dark:text-[rgba(255,255,255,0.8)]">
+        <p className="mt-2 text-center text-xl text-foreground-muted transition-colors duration-300 dark:text-foreground-muted">
           This year&apos;s bounty tracker
         </p>
         <div className="flex justify-center mt-8">
@@ -38,7 +37,7 @@ export default async function HomePage() {
             <BountyDisplay amount={currentBounty} year={currentYear} />
           </div>
         </div>
-        <p className="mt-4 text-center text-sm text-[#666] transition-colors duration-300 dark:text-[#b0b0b0]">
+        <p className="mt-4 text-center text-sm text-foreground-muted transition-colors duration-300 dark:text-foreground-muted">
           Bounty grows $10 per video with no ace. 
           <br />
           Hit an ace to win the pot and reset. 
@@ -46,7 +45,7 @@ export default async function HomePage() {
           Resets at the end of each calendar year.
         </p>
         <section className="mt-12">
-          <h2 className="mb-4 text-2xl font-semibold text-[#333] transition-colors duration-300 [text-shadow:none] dark:text-[#e0e0e0] dark:[text-shadow:2px_2px_4px_rgba(0,0,0,0.2)]">
+          <h2 className="section-heading mb-6 text-2xl">
             Recent videos ({currentYear})
           </h2>
           <VideoList
