@@ -4,7 +4,7 @@ import { isIncludedInBounty } from "@/lib/video";
 import { BountyDisplay } from "@/components/BountyDisplay";
 import { VideoList } from "@/components/VideoList";
 
-const RECENT_COUNT = 10;
+const RECENT_COUNT = 12;
 
 export const dynamic = "force-dynamic";
 
@@ -14,11 +14,7 @@ export default async function HomePage() {
     orderBy: { publishedAt: "desc" },
   });
   const currentYear = new Date().getFullYear();
-  const videosThisYear = videos.filter(
-    (v: (typeof videos)[number]) =>
-      new Date(v.publishedAt).getFullYear() === currentYear
-  );
-  const recent = videosThisYear.slice(0, RECENT_COUNT);
+  const recent = videos.slice(0, RECENT_COUNT);
   const videosForBounty = videos.filter(isIncludedInBounty);
   const currentBounty = getCurrentBounty(videosForBounty, currentYear);
   const bountyAfter = getBountyAfterEachVideo(videosForBounty);
@@ -46,7 +42,7 @@ export default async function HomePage() {
         </p>
         <section className="mt-12">
           <h2 className="section-heading mb-6 text-2xl">
-            Recent videos ({currentYear})
+            Recent Videos
           </h2>
           <VideoList
             videos={recent}
