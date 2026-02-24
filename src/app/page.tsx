@@ -8,6 +8,7 @@ const RECENT_COUNT = 10;
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
+  const spoilerCutoffMs = Date.now();
   const videos = await prisma.video.findMany({
     orderBy: { publishedAt: "desc" },
   });
@@ -17,8 +18,11 @@ export default async function HomePage() {
       new Date(v.publishedAt).getFullYear() === currentYear
   );
   const recent = videosThisYear.slice(0, RECENT_COUNT);
-  const currentBounty = getCurrentBounty(videos, currentYear);
-  const bountyAfter = getBountyAfterEachVideo(videos);
+  const videosForBounty = videos.filter(
+    (v) => (v as { includeInBounty?: boolean }).includeInBounty !== false
+  );
+  const currentBounty = getCurrentBounty(videosForBounty, currentYear);
+  const bountyAfter = getBountyAfterEachVideo(videosForBounty);
 
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-start justify-center px-8 py-8">
@@ -48,7 +52,7 @@ export default async function HomePage() {
           <VideoList
             videos={recent}
             showBountyAfter={bountyAfter}
-            spoilerCutoffMs={Date.now()}
+            spoilerCutoffMs={spoilerCutoffMs}
           />
         </section>
       </div>

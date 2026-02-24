@@ -10,11 +10,12 @@ datasource db {
 }
 
 model Video {
-  id          String   @id @default(cuid())
-  publishedAt DateTime
-  title       String?
-  url         String?
-  hadAce      Boolean
-  winnerName  String?
-  createdAt   DateTime @default(now())
+  id              String   @id @default(cuid())
+  publishedAt     DateTime
+  title           String?
+  url             String?
+  hadAce          Boolean
+  winnerName      String?
+  includeInBounty Boolean  @default(true)
+  createdAt       DateTime @default(now())
 }

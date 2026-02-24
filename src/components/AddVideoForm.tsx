@@ -19,6 +19,7 @@ export function AddVideoForm() {
     const url = (formData.get("url") as string) || undefined;
     const hadAce = formData.get("hadAce") === "yes";
     const winnerName = (formData.get("winnerName") as string) || undefined;
+    const includeInBounty = formData.get("includeInBounty") === "yes";
 
     try {
       const res = await fetch("/api/videos", {
@@ -34,6 +35,7 @@ export function AddVideoForm() {
           url: url || null,
           hadAce,
           winnerName: hadAce ? winnerName || null : null,
+          includeInBounty,
         }),
       });
       if (!res.ok) {
@@ -122,6 +124,16 @@ export function AddVideoForm() {
             className="rounded border border-[#999] bg-white px-3 py-2 text-[#333] placeholder:text-[#666] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
         </div>
+        <label className="flex items-center gap-2 text-sm text-[#333] transition-colors dark:text-zinc-300">
+          <input
+            type="checkbox"
+            name="includeInBounty"
+            value="yes"
+            defaultChecked
+            className="rounded border-[#999] text-[#B79953] focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800"
+          />
+          Include in bounty calculation
+        </label>
       </div>
       <div className="flex justify-end">
         <button

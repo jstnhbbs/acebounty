@@ -21,6 +21,7 @@ export function VideoCardPublic({
   const publishedAtMs = new Date(video.publishedAt).getTime();
   const showSpoilerButton =
     spoilerCutoffMs - publishedAtMs <= SPOILER_WINDOW_MS;
+  const includeInBounty = (video as { includeInBounty?: boolean }).includeInBounty !== false;
 
   return (
     <>
@@ -62,11 +63,15 @@ export function VideoCardPublic({
                       </span>
                     </div>
                   )}
-                  {bountyAfter !== undefined && (
+                  {includeInBounty && bountyAfter !== undefined ? (
                     <p className="text-sm font-semibold text-[#B79953]">
                       Bounty after: <span className="text-base">${bountyAfter}</span>
                     </p>
-                  )}
+                  ) : !includeInBounty ? (
+                    <p className="text-sm text-[#666] transition-colors dark:text-[#b0b0b0]">
+                      Not counted in bounty
+                    </p>
+                  ) : null}
                 </div>
               )}
             </>
@@ -86,11 +91,15 @@ export function VideoCardPublic({
                   </span>
                 </div>
               )}
-              {bountyAfter !== undefined && (
+              {includeInBounty && bountyAfter !== undefined ? (
                 <p className="text-sm font-semibold text-[#B79953]">
                   Bounty after: <span className="text-base">${bountyAfter}</span>
                 </p>
-              )}
+              ) : !includeInBounty ? (
+                <p className="text-sm text-[#666] transition-colors dark:text-[#b0b0b0]">
+                  Not counted in bounty
+                </p>
+              ) : null}
             </div>
           )}
         </div>

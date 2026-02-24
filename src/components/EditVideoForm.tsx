@@ -22,6 +22,9 @@ export function EditVideoForm({ video }: { video: Video }) {
   const [url, setUrl] = useState(video.url ?? "");
   const [hadAce, setHadAce] = useState(video.hadAce);
   const [winnerName, setWinnerName] = useState(video.winnerName ?? "");
+  const [includeInBounty, setIncludeInBounty] = useState(
+    (video as { includeInBounty?: boolean }).includeInBounty !== false
+  );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,6 +40,7 @@ export function EditVideoForm({ video }: { video: Video }) {
           url: url || null,
           hadAce,
           winnerName: hadAce ? winnerName || null : null,
+          includeInBounty,
         }),
       });
       if (!res.ok) {
@@ -134,6 +138,15 @@ export function EditVideoForm({ video }: { video: Video }) {
             className="rounded border border-[#999] bg-white px-3 py-2 text-[#333] placeholder:text-[#666] dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
         </div>
+        <label className="flex items-center gap-2 text-sm text-[#333] transition-colors dark:text-zinc-300">
+          <input
+            type="checkbox"
+            checked={includeInBounty}
+            onChange={(e) => setIncludeInBounty(e.target.checked)}
+            className="rounded border-[#999] text-[#B79953] focus:ring-[#B79953] dark:border-zinc-600 dark:bg-zinc-800"
+          />
+          Include in bounty calculation
+        </label>
       </div>
       <div className="flex justify-end gap-2">
         <Link

@@ -45,7 +45,12 @@ From the project root, run the migration SQL against Turso (replace the path wit
 turso db shell acebounty < prisma/migrations/20260220042744_init/migration.sql
 ```
 
-If you add more migrations later, run each `prisma/migrations/<name>/migration.sql` in order.
+If you add more migrations later, run each `prisma/migrations/<name>/migration.sql` **in order** (oldest first). For example, after adding the `includeInBounty` field:
+
+```bash
+# After 20260220042744_init, run:
+turso db shell acebounty < prisma/migrations/20260224185218_add_include_in_bounty/migration.sql
+```
 
 **Option B – Prisma migrate deploy (if you set DATABASE_URL for Turso)**
 

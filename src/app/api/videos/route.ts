@@ -21,7 +21,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { publishedAt, title, url, hadAce, winnerName } = body;
+    const { publishedAt, title, url, hadAce, winnerName, includeInBounty } = body;
     if (publishedAt == null || hadAce == null) {
       return NextResponse.json(
         { error: "publishedAt and hadAce are required" },
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
         url: url ?? null,
         hadAce: Boolean(hadAce),
         winnerName: hadAce && winnerName ? String(winnerName) : null,
+        includeInBounty: includeInBounty !== false,
       },
     });
     return NextResponse.json(video);

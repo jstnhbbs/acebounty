@@ -57,11 +57,15 @@ export function VideoRow({
               </span>
             </div>
           )}
-          {bountyAfter !== undefined && (
+          {(video as { includeInBounty?: boolean }).includeInBounty !== false && bountyAfter !== undefined ? (
             <p className="text-sm font-semibold text-[#B79953]">
               Bounty after: <span className="text-base">${bountyAfter}</span>
             </p>
-          )}
+          ) : (video as { includeInBounty?: boolean }).includeInBounty === false ? (
+            <p className="text-sm text-[#666] transition-colors dark:text-[#b0b0b0]">
+              Not counted in bounty
+            </p>
+          ) : null}
         </div>
 
         {/* Actions */}
