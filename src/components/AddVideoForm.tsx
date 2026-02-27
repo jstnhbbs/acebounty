@@ -1,6 +1,7 @@
 "use client";
 
 import { toDatetimeLocal } from "@/lib/format";
+import { VIDEO_CATEGORIES } from "@/lib/video-categories";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +22,7 @@ export function AddVideoForm() {
     const hadAce = formData.get("hadAce") === "yes";
     const winnerName = (formData.get("winnerName") as string) || undefined;
     const includeInBounty = formData.get("includeInBounty") === "yes";
+    const category = (formData.get("category") as string)?.trim() || null;
 
     try {
       const res = await fetch("/api/videos", {
@@ -37,6 +39,7 @@ export function AddVideoForm() {
           hadAce,
           winnerName: hadAce ? winnerName || null : null,
           includeInBounty,
+          category,
         }),
       });
       if (!res.ok) {
@@ -78,6 +81,16 @@ export function AddVideoForm() {
             className="form-input"
           />
         </div>
+        <div>
+          <label className="form-label">Category</label>
+          <select name="category" className="form-input" aria-label="Video category">
+            {VIDEO_CATEGORIES.map(({ value, label }) => (
+              <option key={value || "none"} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div>
         <label className="form-label">URL (optional)</label>
@@ -101,7 +114,7 @@ export function AddVideoForm() {
           </label>
         </fieldset>
         <div>
-          <label className="form-label">Winner name (if ace)</label>
+          <label className="form-label">Winner (if ace)</label>
           <input
             type="text"
             name="winnerName"
@@ -117,7 +130,7 @@ export function AddVideoForm() {
             defaultChecked
             className="rounded border-border text-accent focus:ring-accent dark:border-zinc-600 dark:bg-zinc-800"
           />
-          Include in bounty calculation
+          Include in bounty
         </label>
       </div>
       <div className="flex justify-end">

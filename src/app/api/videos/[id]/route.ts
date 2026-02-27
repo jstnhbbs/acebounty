@@ -30,7 +30,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { publishedAt, title, url, hadAce, winnerName, includeInBounty } = body;
+    const { publishedAt, title, url, hadAce, winnerName, includeInBounty, category } = body;
     const data: {
       publishedAt?: Date;
       title?: string | null;
@@ -38,6 +38,7 @@ export async function PATCH(
       hadAce?: boolean;
       winnerName?: string | null;
       includeInBounty?: boolean;
+      category?: string | null;
     } = {};
     if (publishedAt != null) data.publishedAt = new Date(publishedAt);
     if (title !== undefined) data.title = title ?? null;
@@ -46,6 +47,8 @@ export async function PATCH(
     if (winnerName !== undefined)
       data.winnerName = body.hadAce && winnerName ? String(winnerName) : null;
     if (includeInBounty !== undefined) data.includeInBounty = Boolean(includeInBounty);
+    if (category !== undefined)
+      data.category = category && String(category).trim() ? String(category).trim() : null;
     const video = await prisma.video.update({
       where: { id },
       data,

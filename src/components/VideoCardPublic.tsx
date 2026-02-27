@@ -27,14 +27,21 @@ export function VideoCardPublic({
   return (
     <>
       <div className="flex flex-1 flex-col gap-4">
-        {/* Title and Date */}
+        {/* Title, Date, Category */}
         <div className="flex flex-col gap-1">
           <h3 className="text-xl font-semibold leading-tight text-foreground transition-colors duration-300 group-hover:text-accent">
             {video.title || "Untitled"}
           </h3>
-          <p className="text-base text-foreground-muted transition-colors duration-300">
-            {formattedDate}
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-base text-foreground-muted transition-colors duration-300">
+              {formattedDate}
+            </p>
+            {(video as { category?: string | null }).category && (
+              <span className="rounded-full bg-foreground-muted/15 px-2.5 py-0.5 text-sm font-medium text-foreground-muted">
+                {(video as { category?: string | null }).category}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Result Section */}

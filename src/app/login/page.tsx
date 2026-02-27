@@ -36,9 +36,9 @@ function LoginForm() {
     <main className="flex min-h-[calc(100vh-80px)] items-center justify-center px-8 py-8">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-xl border-2 border-transparent bg-white p-6 shadow-sm transition-all duration-300 dark:bg-card-bg-dark dark:shadow-card-dark"
+        className="card-dark w-full max-w-sm rounded-xl border-2 border-transparent p-6 shadow-sm transition-all duration-300"
       >
-        <h1 className="mb-4 text-xl font-semibold text-foreground">
+        <h1 className="card-dark-title mb-4 text-xl font-semibold">
           Admin login
         </h1>
         {error && <p className="mb-3 form-error">{error}</p>}

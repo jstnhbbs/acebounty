@@ -50,6 +50,8 @@ If you add more migrations later, run each `prisma/migrations/<name>/migration.s
 ```bash
 # After 20260220042744_init, run:
 turso db shell acebounty < prisma/migrations/20260224185218_add_include_in_bounty/migration.sql
+# Then (if present):
+turso db shell acebounty < prisma/migrations/20260227152030_add_video_category/migration.sql
 ```
 
 **Option B – Prisma migrate deploy (if you set DATABASE_URL for Turso)**

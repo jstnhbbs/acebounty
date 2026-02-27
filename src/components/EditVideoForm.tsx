@@ -3,6 +3,7 @@
 import type { Video } from "@/lib/db";
 import { toDatetimeLocal } from "@/lib/format";
 import { isIncludedInBounty } from "@/lib/video";
+import { VIDEO_CATEGORIES } from "@/lib/video-categories";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -22,6 +23,7 @@ export function EditVideoForm({ video }: { video: Video }) {
   const [includeInBounty, setIncludeInBounty] = useState(() =>
     isIncludedInBounty(video)
   );
+  const [category, setCategory] = useState(video.category ?? "");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -38,6 +40,7 @@ export function EditVideoForm({ video }: { video: Video }) {
           hadAce,
           winnerName: hadAce ? winnerName || null : null,
           includeInBounty,
+          category: category?.trim() || null,
         }),
       });
       if (!res.ok) {
@@ -80,6 +83,21 @@ export function EditVideoForm({ video }: { video: Video }) {
             className="form-input"
           />
         </div>
+        <div>
+          <label className="form-label">Category</label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="form-input"
+            aria-label="Video category"
+          >
+            {VIDEO_CATEGORIES.map(({ value, label }) => (
+              <option key={value || "none"} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div>
         <label className="form-label">URL (optional)</label>
@@ -114,7 +132,7 @@ export function EditVideoForm({ video }: { video: Video }) {
           </label>
         </fieldset>
         <div>
-          <label className="form-label">Winner name (if ace)</label>
+          <label className="form-label">Winner (if ace)</label>
           <input
             type="text"
             value={winnerName}
@@ -130,7 +148,7 @@ export function EditVideoForm({ video }: { video: Video }) {
             onChange={(e) => setIncludeInBounty(e.target.checked)}
             className="rounded border-border text-accent focus:ring-accent dark:border-zinc-600 dark:bg-zinc-800"
           />
-          Include in bounty calculation
+          Include in bounty
         </label>
       </div>
       <div className="flex justify-end gap-2">

@@ -33,7 +33,7 @@ export default async function AdminPage() {
           <h2 className="mb-4 text-xl font-semibold text-foreground dark:text-foreground">
             Add video
           </h2>
-          <div className="rounded-xl border-2 border-transparent bg-white p-6 shadow-sm transition-all duration-300 dark:bg-card-bg-dark dark:shadow-card-dark">
+          <div className="card-dark rounded-xl border-2 border-transparent p-6 shadow-sm transition-all duration-300">
             <AddVideoForm />
           </div>
         </section>

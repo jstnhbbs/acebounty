@@ -284,13 +284,54 @@ html.dark .card-actions {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Dark card: #171717 background + #FAFAFA text in both light and dark mode (Add Video, Login) */
+.card-dark {
+  background: #171717;
+}
+
+.card-dark .form-label,
+.card-dark .form-label-inline,
+.card-dark label.form-label,
+.card-dark label.form-label-inline {
+  color: #fafafa !important;
+}
+
+.card-dark .form-input {
+  background: #262626;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fafafa;
+}
+
+.card-dark .form-input::placeholder {
+  color: #d4d4d4;
+}
+
+.card-dark .form-input option {
+  background: #262626;
+  color: #fafafa;
+}
+
+.card-dark .form-input:focus {
+  border-color: var(--accent);
+}
+
+.card-dark .form-error {
+  background: rgb(127 29 29 / 0.4);
+  color: #fecaca;
+}
+
+.card-dark .card-dark-title,
+.card-dark h1 {
+  color: #fafafa !important;
+}
+
 /* Form elements – shared input/label/button styles */
 .form-label {
   display: block;
   margin-bottom: 0.25rem;
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--foreground);
+  color: #374151;
 }
 
 .form-label-inline {
@@ -298,7 +339,22 @@ html.dark .card-actions {
   align-items: center;
   gap: 0.375rem;
   font-size: 0.875rem;
-  color: var(--foreground);
+  color: #374151;
+}
+
+[data-theme="dark"] .form-label,
+[data-theme="dark"] .form-label-inline,
+html.dark .form-label,
+html.dark .form-label-inline {
+  color: #fafafa;
+}
+
+/* Force readable label text in dark mode (radios, checkbox, field labels) */
+[data-theme="dark"] label.form-label-inline,
+[data-theme="dark"] label.form-label,
+html.dark label.form-label-inline,
+html.dark label.form-label {
+  color: #fafafa !important;
 }
 
 .form-input {
@@ -308,8 +364,14 @@ html.dark .card-actions {
   background: white;
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
-  color: var(--foreground);
+  color: #171717;
   transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* Light mode: readable input/option text (explicit, not #171717 if theme is wrong) */
+.form-input option {
+  background: #ffffff;
+  color: #171717;
 }
 
 .form-input:focus {
@@ -322,16 +384,27 @@ html.dark .card-actions {
   color: var(--foreground-muted);
 }
 
+[data-theme="dark"] .form-input::placeholder,
+html.dark .form-input::placeholder {
+  color: #d4d4d4;
+}
+
 [data-theme="dark"] .form-input,
 html.dark .form-input {
   border-color: rgba(255, 255, 255, 0.2);
   background: var(--input-bg-dark);
-  color: var(--foreground);
+  color: #fafafa;
 }
 
 [data-theme="dark"] .form-input:focus,
 html.dark .form-input:focus {
   border-color: var(--accent);
+}
+
+[data-theme="dark"] .form-input option,
+html.dark .form-input option {
+  background: #262626;
+  color: #fafafa;
 }
 
 .form-input-sm {

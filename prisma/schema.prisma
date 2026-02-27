@@ -17,5 +17,6 @@ model Video {
   hadAce          Boolean
   winnerName      String?
   includeInBounty Boolean  @default(true)
+  category        String?
   createdAt       DateTime @default(now())
 }
