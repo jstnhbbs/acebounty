@@ -1,10 +1,14 @@
 import { prisma } from "@/lib/db";
-import { getCurrentBounty, getBountyAfterEachVideo } from "@/lib/bounty";
+import {
+  getCurrentBounty,
+  getBountyAfterEachVideo,
+  getMostRecentAceWinner,
+} from "@/lib/bounty";
 import { isIncludedInBounty } from "@/lib/video";
 import { BountyDisplay } from "@/components/BountyDisplay";
 import { VideoList } from "@/components/VideoList";
 
-const RECENT_COUNT = 12;
+const RECENT_COUNT = 6;
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +22,7 @@ export default async function HomePage() {
   const videosForBounty = videos.filter(isIncludedInBounty);
   const currentBounty = getCurrentBounty(videosForBounty, currentYear);
   const bountyAfter = getBountyAfterEachVideo(videosForBounty);
+  const lastWinner = getMostRecentAceWinner(videosForBounty, currentYear);
 
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-start justify-center px-8 py-8">
@@ -33,6 +38,11 @@ export default async function HomePage() {
             <BountyDisplay amount={currentBounty} year={currentYear} />
           </div>
         </div>
+        {lastWinner && (
+          <p className="mt-3 text-center text-sm text-foreground-muted transition-colors duration-300 dark:text-foreground-muted">
+            Last winner: {lastWinner.winnerName || "Anonymous"} — ${lastWinner.amount}
+          </p>
+        )}
         <p className="mt-4 text-center text-sm text-foreground-muted transition-colors duration-300 dark:text-foreground-muted">
           Bounty grows $10 per video with no ace. 
           <br />

@@ -69,4 +69,31 @@ export function getBountyAfterEachVideo(
   return result;
 }
 
+/**
+ * Most recent ace winner in the given year and the amount they won.
+ * Returns null if no ace in that year.
+ */
+export function getMostRecentAceWinner(
+  videos: VideoForBounty[],
+  year: number
+): { winnerName: string | null; amount: number } | null {
+  const yearVideos = filterByYear(videos, year);
+  const ordered = [...yearVideos].sort(
+    (a, b) =>
+      new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
+  );
+  const bountyAfter = getBountyAfterEachVideo(videos);
+  for (let i = ordered.length - 1; i >= 0; i--) {
+    if (ordered[i].hadAce) {
+      const amount =
+        i === 0 ? 0 : (bountyAfter.get(ordered[i - 1].id) ?? 0);
+      return {
+        winnerName: ordered[i].winnerName ?? null,
+        amount,
+      };
+    }
+  }
+  return null;
+}
+
 export { BOUNTY_PER_VIDEO };
