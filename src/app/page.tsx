@@ -30,9 +30,6 @@ export default async function HomePage() {
         <h1 className="text-center text-4xl font-bold transition-colors duration-300 sm:text-5xl page-title">
           Ace Bounty
         </h1>
-        <p className="mt-2 text-center text-xl text-foreground-muted transition-colors duration-300 dark:text-foreground-muted">
-          This year&apos;s bounty tracker
-        </p>
         <div className="flex justify-center mt-8">
           <div className="w-full max-w-xl">
             <BountyDisplay amount={currentBounty} year={currentYear} />
