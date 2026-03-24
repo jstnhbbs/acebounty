@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { getSpoilerCutoffMs } from "@/lib/spoiler";
 import { HistoryWithYearFilter } from "@/components/HistoryWithYearFilter";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +13,7 @@ export default async function HistoryPage() {
   const videos = await prisma.video.findMany({
     orderBy: { publishedAt: "desc" },
   });
-  const spoilerCutoffMs = Date.now();
+  const spoilerCutoffMs = getSpoilerCutoffMs();
 
   return (
     <main className="flex min-h-[calc(100vh-80px)] items-start justify-center px-8 py-8">

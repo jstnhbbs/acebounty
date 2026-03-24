@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import { getBountyAfterEachVideo } from "@/lib/bounty";
+import { getSpoilerCutoffMs } from "@/lib/spoiler";
 import { isIncludedInBounty } from "@/lib/video";
 import { VideoList } from "@/components/VideoList";
 import { AddVideoForm } from "@/components/AddVideoForm";
@@ -8,6 +9,7 @@ import Link from "next/link";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  const spoilerCutoffMs = getSpoilerCutoffMs();
   const videos = await prisma.video.findMany({
     orderBy: { publishedAt: "desc" },
   });
@@ -45,7 +47,7 @@ export default async function AdminPage() {
           <VideoList
             videos={videos}
             showBountyAfter={bountyAfter}
-            spoilerCutoffMs={Date.now()}
+            spoilerCutoffMs={spoilerCutoffMs}
             admin
           />
         </section>

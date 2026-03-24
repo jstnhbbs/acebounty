@@ -32,6 +32,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [userPreference, setUserPreference] = useState<Theme | null>(null);
 
   useEffect(() => {
+    // Mark hydrated before reading localStorage / system theme (avoids SSR mismatch).
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional one-time hydration flag
     setMounted(true);
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("theme") as Theme | null;

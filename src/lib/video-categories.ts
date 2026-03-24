@@ -8,5 +8,3 @@ export const VIDEO_CATEGORIES = [
   { value: "Break 69 Challenge", label: "Break 69 Challenge" },
   { value: "All-Star Event", label: "All-Star Event" },
 ] as const;
-
-export type VideoCategoryValue = (typeof VIDEO_CATEGORIES)[number]["value"];

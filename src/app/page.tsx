@@ -5,6 +5,7 @@ import {
   getMostRecentAceWinner,
 } from "@/lib/bounty";
 import { isIncludedInBounty } from "@/lib/video";
+import { getSpoilerCutoffMs } from "@/lib/spoiler";
 import { BountyDisplay } from "@/components/BountyDisplay";
 import { VideoList } from "@/components/VideoList";
 
@@ -13,7 +14,7 @@ const RECENT_COUNT = 6;
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const spoilerCutoffMs = Date.now();
+  const spoilerCutoffMs = getSpoilerCutoffMs();
   const videos = await prisma.video.findMany({
     orderBy: { publishedAt: "desc" },
   });
