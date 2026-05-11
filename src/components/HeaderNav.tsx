@@ -37,6 +37,14 @@ export function HeaderNav() {
         >
           History
         </Link>
+        <Link
+          href="/winners"
+          className={
+            pathname === "/winners" ? `${navLink} ${navLinkActive}` : navLink
+          }
+        >
+          Winners
+        </Link>
         {session?.user ? (
           <HeaderAuth navLink={navLink} navLinkActive={navLinkActive} pathname={pathname} />
         ) : (

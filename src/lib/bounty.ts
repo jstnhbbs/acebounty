@@ -96,4 +96,49 @@ export function getMostRecentAceWinner(
   return null;
 }
 
+/** One bounty payout when an ace is hit (videos must already be bounty-included). */
+export type AceWinRecord = {
+  videoId: string;
+  publishedAt: Date;
+  winnerName: string | null;
+  amount: number;
+  year: number;
+};
+
+/** Every ace in chronological bounty context, newest first (per calendar-year rules). */
+export function getAllAceWins(videos: VideoForBounty[]): AceWinRecord[] {
+  const bountyAfter = getBountyAfterEachVideo(videos);
+  const byYear = new Map<number, VideoForBounty[]>();
+  for (const v of videos) {
+    const y = getYear(v.publishedAt);
+    if (!byYear.has(y)) byYear.set(y, []);
+    byYear.get(y)!.push(v);
+  }
+
+  const out: AceWinRecord[] = [];
+  for (const [year, yearVideos] of byYear) {
+    const ordered = [...yearVideos].sort(
+      (a, b) =>
+        new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
+    );
+    for (let i = 0; i < ordered.length; i++) {
+      if (!ordered[i].hadAce) continue;
+      const amount = i === 0 ? 0 : (bountyAfter.get(ordered[i - 1].id) ?? 0);
+      out.push({
+        videoId: ordered[i].id,
+        publishedAt: ordered[i].publishedAt,
+        winnerName: ordered[i].winnerName ?? null,
+        amount,
+        year,
+      });
+    }
+  }
+
+  out.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
+  return out;
+}
+
 export { BOUNTY_PER_VIDEO };
