@@ -25,13 +25,13 @@ export function getCurrentBounty(
   year?: number
 ): number {
   const list = year != null ? filterByYear(videos, year) : [...videos];
-  const ordered = list.sort(
+  const ordered = [...list].sort(
     (a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime()
   );
   let count = 0;
   for (let i = ordered.length - 1; i >= 0; i--) {
-    count++;
     if (ordered[i].hadAce) break;
+    count++;
   }
   return count * BOUNTY_PER_VIDEO;
 }

@@ -57,7 +57,10 @@ export function HistoryWithYearFilter({
   const [selectedMonth, setSelectedMonth] = useState<string>(defaults.month);
   const [selectedCategory, setSelectedCategory] = useState<string>(ALL_CATEGORIES);
 
-  const videosForBounty = videos.filter(isIncludedInBounty);
+  const videosForBounty = useMemo(
+    () => videos.filter(isIncludedInBounty),
+    [videos]
+  );
   const bountyAfter = useMemo(
     () => getBountyAfterEachVideo(videosForBounty),
     [videosForBounty]
@@ -77,7 +80,7 @@ export function HistoryWithYearFilter({
     }
     if (selectedCategory !== ALL_CATEGORIES) {
       list = list.filter(
-        (v) => (v as { category?: string | null }).category === selectedCategory
+        (v) => v.category === selectedCategory
       );
     }
     return list;

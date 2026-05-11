@@ -7,4 +7,5 @@ export const VIDEO_CATEGORIES = [
   { value: "Disc Golf Punishment", label: "Disc Golf Punishment" },
   { value: "Break 69 Challenge", label: "Break 69 Challenge" },
   { value: "All-Star Event", label: "All-Star Event" },
+  { value: "Creators Cup", label: "Creators Cup" }
 ] as const;

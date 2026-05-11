@@ -36,9 +36,9 @@ export function VideoCardPublic({
             <p className="text-base text-foreground-muted transition-colors duration-300">
               {formattedDate}
             </p>
-            {(video as { category?: string | null }).category && (
+            {video.category && (
               <span className="rounded-full bg-foreground-muted/15 px-2.5 py-0.5 text-sm font-medium text-foreground-muted">
-                {(video as { category?: string | null }).category}
+                {video.category}
               </span>
             )}
           </div>

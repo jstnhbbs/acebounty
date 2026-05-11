@@ -17,13 +17,24 @@ export function VideoRow({
 }) {
   const router = useRouter();
   const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   async function handleDelete() {
     if (!confirm("Delete this video?")) return;
+    setDeleteError("");
     setDeleting(true);
     try {
       const res = await fetch(`/api/videos/${video.id}`, { method: "DELETE" });
-      if (res.ok) router.refresh();
+      if (res.ok) {
+        router.refresh();
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      setDeleteError(
+        typeof data.error === "string" ? data.error : "Failed to delete video"
+      );
+    } catch {
+      setDeleteError("Failed to delete video");
     } finally {
       setDeleting(false);
     }
@@ -41,9 +52,9 @@ export function VideoRow({
             <p className="text-sm text-foreground-muted">
               {formattedDate}
             </p>
-            {(video as { category?: string | null }).category && (
+            {video.category && (
               <span className="rounded-full bg-foreground-muted/15 px-2.5 py-0.5 text-sm font-medium text-foreground-muted">
-                {(video as { category?: string | null }).category}
+                {video.category}
               </span>
             )}
           </div>
@@ -73,6 +84,9 @@ export function VideoRow({
         </div>
 
         {/* Actions */}
+        {deleteError ? (
+          <p className="form-error mb-2 text-sm">{deleteError}</p>
+        ) : null}
         <div className="card-actions">
           <Link href={`/admin/videos/${video.id}/edit`} className="card-link">
             Edit
