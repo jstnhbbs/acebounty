@@ -94,11 +94,26 @@ The seed script uses the same `src/lib/db` client, so it will connect to Turso w
    | `AUTH_SECRET`        | e.g. `openssl rand -base64 32` | Production     |
    | `ADMIN_EMAIL`        | Your admin email         | Production     |
    | `ADMIN_PASSWORD`     | Your admin password      | Production     |
+   | `CRON_SECRET`        | e.g. `openssl rand -base64 32` | Production     |
 
    Do **not** set `DATABASE_URL` in Vercel. The app uses Turso when `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` are set.
 
 3. Build command: **`npm run build`** (default). No need to run migrations in the build; schema is applied in step 2.
 4. Deploy: push to the connected branch; Vercel will build and deploy.
+
+### Scheduled YouTube sync
+
+`vercel.json` configures Vercel Cron to call `/api/cron/youtube-sync` at `23:00` and `00:00` UTC. The route only performs the sync when that instant is 6 PM in `America/Chicago`, so it continues to run at 6 PM Central across daylight saving changes.
+
+The sync reads Foundation Disc Golf's public YouTube uploads feed, skips Friday releases, skips URLs already in the database, and creates new `Video` rows with:
+
+- `publishedAt` set to 5:00 PM Eastern Time on the video's release date
+- `hadAce = false`
+- `winnerName = null`
+- `includeInBounty = true`
+- `category` set only when the title contains one of the existing category labels
+
+To test manually after deploy, call `/api/cron/youtube-sync?force=1` with an `Authorization: Bearer <CRON_SECRET>` header.
 
 ---
 
