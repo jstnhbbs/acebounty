@@ -15,6 +15,7 @@ type FeedVideo = {
 
 export type YoutubeSyncResult = {
   scanned: number;
+  skippedShorts: number;
   publicCandidates: number;
   skippedFriday: number;
   skippedExisting: number;
@@ -147,7 +148,10 @@ export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> 
   }
 
   const videos = parseFeed(await response.text());
-  const publicCandidates = videos.filter((video) => !isFridayInEastern(video.published));
+  const longFormVideos = videos.filter((video) => video.url.includes("/watch?v="));
+  const publicCandidates = longFormVideos.filter(
+    (video) => !isFridayInEastern(video.published)
+  );
   const existing = await prisma.video.findMany({
     where: { url: { in: publicCandidates.map((video) => video.url) } },
     select: { url: true },
@@ -173,8 +177,9 @@ export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> 
 
   return {
     scanned: videos.length,
+    skippedShorts: videos.length - longFormVideos.length,
     publicCandidates: publicCandidates.length,
-    skippedFriday: videos.length - publicCandidates.length,
+    skippedFriday: longFormVideos.length - publicCandidates.length,
     skippedExisting: existingUrls.size,
     created: createdUrls.length,
     createdUrls,
