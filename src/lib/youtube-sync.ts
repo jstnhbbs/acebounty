@@ -186,7 +186,7 @@ export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> 
   };
 }
 
-export function isFiveFifteenPmEastern(date = new Date()): boolean {
+export function isFiveThirtyPmEasternWindow(date = new Date()): boolean {
   const parts = getZonedParts(date, "America/New_York");
-  return parts.hour === 17 && parts.minute === 15;
+  return parts.hour === 17 && parts.minute >= 30 && parts.minute < 45;
 }

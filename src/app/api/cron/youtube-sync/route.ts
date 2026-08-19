@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import {
-  isFiveFifteenPmEastern,
+  isFiveThirtyPmEasternWindow,
   syncFoundationYoutubeVideos,
 } from "@/lib/youtube-sync";
 
@@ -19,10 +19,10 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const force = searchParams.get("force") === "1";
-  if (!force && !isFiveFifteenPmEastern()) {
+  if (!force && !isFiveThirtyPmEasternWindow()) {
     return NextResponse.json({
       skipped: true,
-      reason: "Not 5:15 PM America/New_York",
+      reason: "Not within the 5:30-5:44 PM America/New_York sync window",
     });
   }
 
