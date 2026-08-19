@@ -186,7 +186,7 @@ export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> 
   };
 }
 
-export function isSixPmCentral(date = new Date()): boolean {
-  const parts = getZonedParts(date, "America/Chicago");
-  return parts.hour === 18;
+export function isFiveFifteenPmEastern(date = new Date()): boolean {
+  const parts = getZonedParts(date, "America/New_York");
+  return parts.hour === 17 && parts.minute === 15;
 }

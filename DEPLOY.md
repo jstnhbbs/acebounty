@@ -103,7 +103,7 @@ The seed script uses the same `src/lib/db` client, so it will connect to Turso w
 
 ### Scheduled YouTube sync
 
-`vercel.json` configures Vercel Cron to call `/api/cron/youtube-sync` at `23:00` and `00:00` UTC. The route only performs the sync when that instant is 6 PM in `America/Chicago`, so it continues to run at 6 PM Central across daylight saving changes.
+`vercel.json` configures Vercel Cron to call `/api/cron/youtube-sync` at `21:15` and `22:15` UTC. The route only performs the sync when that instant is 5:15 PM in `America/New_York`, so it continues to run at 5:15 PM Eastern across daylight saving changes.
 
 The sync reads Foundation Disc Golf's public YouTube uploads feed, skips Shorts, skips Friday releases, skips URLs already in the database, and creates new `Video` rows with:
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import {
-  isSixPmCentral,
+  isFiveFifteenPmEastern,
   syncFoundationYoutubeVideos,
 } from "@/lib/youtube-sync";
 
@@ -19,10 +19,10 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const force = searchParams.get("force") === "1";
-  if (!force && !isSixPmCentral()) {
+  if (!force && !isFiveFifteenPmEastern()) {
     return NextResponse.json({
       skipped: true,
-      reason: "Not 6 PM America/Chicago",
+      reason: "Not 5:15 PM America/New_York",
     });
   }
 
