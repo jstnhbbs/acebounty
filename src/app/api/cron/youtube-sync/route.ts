@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import {
-  isFivePmEasternHour,
-  syncFoundationYoutubeVideos,
-} from "@/lib/youtube-sync";
+import { syncFoundationYoutubeVideos } from "@/lib/youtube-sync";
 
 export const dynamic = "force-dynamic";
 
@@ -18,14 +15,7 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const force = searchParams.get("force") === "1";
   const dryRun = searchParams.get("dryRun") === "1";
-  if (!force && !isFivePmEasternHour()) {
-    return NextResponse.json({
-      skipped: true,
-      reason: "Not within the 5 PM America/New_York sync hour",
-    });
-  }
 
   try {
     const result = await syncFoundationYoutubeVideos({ dryRun });

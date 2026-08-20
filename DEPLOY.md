@@ -103,7 +103,7 @@ The seed script uses the same `src/lib/db` client, so it will connect to Turso w
 
 ### Scheduled YouTube sync
 
-`vercel.json` configures Vercel Cron to call `/api/cron/youtube-sync` once per day at `21:30` UTC, which is 5:30 PM Eastern during daylight saving time. The route only performs the sync during the 5 PM hour in `America/New_York`, which tolerates scheduler delays and works with Vercel Hobby's once-per-day cron limit.
+`vercel.json` configures Vercel Cron to call `/api/cron/youtube-sync` once per day. The route runs whenever Vercel invokes it, so the cron expression is the source of truth for timing and remains compatible with Vercel Hobby's once-per-day cron limit.
 
 The sync reads Foundation Disc Golf's public YouTube uploads feed, skips Shorts, skips Friday releases, skips URLs already in the database, and creates new `Video` rows with:
 
@@ -113,7 +113,7 @@ The sync reads Foundation Disc Golf's public YouTube uploads feed, skips Shorts,
 - `includeInBounty = true`
 - `category` set only when the title contains one of the existing category labels
 
-To test manually after deploy without inserting rows, call `/api/cron/youtube-sync?force=1&dryRun=1` with an `Authorization: Bearer <CRON_SECRET>` header. Remove `dryRun=1` to perform a manual sync.
+To test manually after deploy without inserting rows, call `/api/cron/youtube-sync?dryRun=1` with an `Authorization: Bearer <CRON_SECRET>` header. Remove `dryRun=1` to perform a manual sync.
 
 ---
 
