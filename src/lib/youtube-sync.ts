@@ -20,7 +20,9 @@ export type YoutubeSyncResult = {
   skippedFriday: number;
   skippedExisting: number;
   created: number;
+  dryRun: boolean;
   createdUrls: string[];
+  candidateUrls: string[];
 };
 
 function decodeXml(text: string): string {
@@ -141,7 +143,11 @@ function inferCategory(title: string): string | null {
   return null;
 }
 
-export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> {
+export async function syncFoundationYoutubeVideos({
+  dryRun = false,
+}: {
+  dryRun?: boolean;
+} = {}): Promise<YoutubeSyncResult> {
   const response = await fetch(FEED_URL, { cache: "no-store" });
   if (!response.ok) {
     throw new Error(`Failed to fetch YouTube feed: ${response.status}`);
@@ -161,17 +167,19 @@ export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> 
 
   const createdUrls: string[] = [];
   for (const video of toCreate) {
-    await prisma.video.create({
-      data: {
-        publishedAt: getReleaseDateAtFiveEastern(video.published),
-        title: video.title,
-        url: video.url,
-        hadAce: false,
-        winnerName: null,
-        includeInBounty: true,
-        category: inferCategory(video.title),
-      },
-    });
+    if (!dryRun) {
+      await prisma.video.create({
+        data: {
+          publishedAt: getReleaseDateAtFiveEastern(video.published),
+          title: video.title,
+          url: video.url,
+          hadAce: false,
+          winnerName: null,
+          includeInBounty: true,
+          category: inferCategory(video.title),
+        },
+      });
+    }
     createdUrls.push(video.url);
   }
 
@@ -182,11 +190,13 @@ export async function syncFoundationYoutubeVideos(): Promise<YoutubeSyncResult> 
     skippedFriday: longFormVideos.length - publicCandidates.length,
     skippedExisting: existingUrls.size,
     created: createdUrls.length,
+    dryRun,
     createdUrls,
+    candidateUrls: publicCandidates.map((video) => video.url),
   };
 }
 
-export function isFiveThirtyPmEasternWindow(date = new Date()): boolean {
+export function isFivePmEasternHour(date = new Date()): boolean {
   const parts = getZonedParts(date, "America/New_York");
-  return parts.hour === 17 && parts.minute >= 30 && parts.minute < 45;
+  return parts.hour === 17;
 }
